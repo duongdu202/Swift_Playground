@@ -22,6 +22,16 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     public var sizeAlien = 100.0
     public var score = 0
 
+    public func setScore(_ indext: Int){
+        if score > indext {
+            score = indext
+        }
+    }
+
+    public func showScore(){
+        self.addChild(spriteNode)
+    }
+
     // Spawn Time Frequencies
     public var redAlienfrequency = 0.5
     public var bulletFrequency = 0.3
@@ -42,15 +52,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         player.physicsBody?.contactTestBitMask = PhysicsCategories.redAlien.rawValue | PhysicsCategories.blueAlien.rawValue
         player.physicsBody?.isDynamic = false
 
-        spriteNode = SKSpriteNode(color: .blue, size: CGSize(width: size.width * 0.06, height: size.width * 0.03))
-        spriteNode.position = CGPoint(x: 100, y : 100)
-        self.addChild(spriteNode)
         
-        let labelNode = SKLabelNode(text: "\(score)")
-        labelNode.fontColor = SKColor.white
-        labelNode.fontSize = 24
-        labelNode.position = CGPoint(x: 0, y: 0)
-        spriteNode.addChild(labelNode)
 
         /*The game has a contact delegate, so when two sprite nodes collide with each other, 
  it will perform the contact and collision. */
@@ -101,6 +103,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         } 
         if _removeAlien{
             redAlien?.removeFromParent()
+            score += 1
         }
     }
 
@@ -116,6 +119,24 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         newBg.position = CGPoint(x: frame.midX, y: frame.midY)
         newBg.size = CGSize(width: size.width*0.7, height: size.height)
         self.addChild(newBg)
+
+
+        spriteNode = SKSpriteNode(color: .blue, size: CGSize(width: size.width * 0.2, height: size.width * 0.05))
+        spriteNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 4)
+        spriteNode.zPosition = 15
+        // self.addChild(spriteNode)
+        
+        let labelNode = SKLabelNode(text: "Score: \(score)")
+        labelNode.zPosition = 20
+        labelNode.fontColor = SKColor.white
+        labelNode.fontSize = 48
+        labelNode.position = CGPoint(x: 0, y: 0)
+        labelNode.horizontalAlignmentMode = .center
+        labelNode.verticalAlignmentMode = .center
+        labelNode.fontName = "Avenir-Black"
+        labelNode.fontName = "Helvetica-Bold"
+        spriteNode.addChild(labelNode)
+        
     }
     
     public func createBulletsClone(_ name: String) {
@@ -149,7 +170,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     public func createAliensClone(_ name: String) {
         // Alien Sprite Node
         alienClone = SKSpriteNode(texture: SKTexture(image: #imageLiteral(resourceName: name)))
-        alienClone.size = CGSize(width: size.width * 0.03 * (sizeAlien / 100), height: size.width * 0.025 * (sizeAlien / 100))
+        alienClone.size = CGSize(width: size.width * 0.04 * (sizeAlien / 100), height: size.width * 0.025 * (sizeAlien / 100))
         // Alien Physics Body Properties
         alienClone.physicsBody = SKPhysicsBody(rectangleOf: alienClone.size)
         alienClone.physicsBody?.categoryBitMask = PhysicsCategories.redAlien.rawValue
@@ -200,7 +221,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
 
     
     public func overrideBackground() {
-        sleep(1)
+        usleep(200000)
     }
 
     public func checkHandleTouchesMoved(){

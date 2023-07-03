@@ -85,6 +85,11 @@ func addAlien(_ name: String){
     gameScene.addChild(gameScene.alienClone)
 }
 
+func showScore(_ indext: Int){
+    gameScene.setScore(indext)
+    gameScene.showScore()
+}
+
 func gameOver(){
     gameScene.overrideBackground()
 }
@@ -124,6 +129,7 @@ queue2.async {
 addPlayer("Player4.png")
 addBullet("Bullet.png")
 addAlien("Alien.png")
+var score = 0
 //#-end-editable-code
 
 
@@ -144,6 +150,7 @@ queue.async {
 while true {
     if touchAlien{
         gameOver()
+        showScore(score)
         stopAll()
     }
 }
@@ -201,6 +208,7 @@ queue2.async {
 //#-editable-code
 while true {
     if touchBullet{
+        score += 1
         removeAlien()
         removeBullet()
     }
